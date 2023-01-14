@@ -1,5 +1,8 @@
-import '../styles/App.css';
+import './styles/App.css';
 import {useRef, useState} from "react";
+import SearchBar from "./components/SearchBar.jsx";
+import InputForm from "./components/InputForm";
+import ItemsList from "./components/ItemsList";
 
 export default function App(props) {
 
@@ -15,6 +18,7 @@ export default function App(props) {
     function formSubmit(e) {
         e.preventDefault();
         const value = inputRef.current.value;
+        console.log(value);
         if(!value.trim()) {
             alert('you try to add empty item');
             return;
@@ -30,21 +34,15 @@ export default function App(props) {
         setQuery('');
     }
 
+    function searchInput(e) {
+        setQuery(e.target.value);
+    }
+
     return (
         <div className='App'>
-            <div className='SearchBar'>
-                <span>Search:</span>
-                <input type="search" value={query} onChange={(e) => setQuery(e.target.value)}/>
-            </div>
-            <form action="#" className='ItemForm' onSubmit={formSubmit}>
-                <span>New item: </span>
-                <input type="text" ref={inputRef} onChange={clearSearchBar}/>
-                <button type='submit'>Add</button>
-            </form>
-            <h3 style={{fontSize: '25px', margin: '0px'}}>Items</h3>
-            <ol className='ItemsList'>
-                {filteredItems.map(i => <li>{i}</li>)}
-            </ol>
+            <SearchBar inputValue={query} searchInput={searchInput}/>
+            <InputForm onSubmit={formSubmit} refs={inputRef} onChange={clearSearchBar}/>
+            <ItemsList items={filteredItems}/>
         </div>
     )
 }
